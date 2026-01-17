@@ -1796,7 +1796,11 @@ if (isset($_SESSION['formResult'])) {
                 if (!window.faceApiModelsLoaded) {
                     previewText.textContent = 'Loading AI models...';
                     const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models';
-                    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+                    // Load both for flexibility
+                    await Promise.all([
+                        faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+                        faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL)
+                    ]);
                     window.faceApiModelsLoaded = true;
                 }
 
@@ -1807,10 +1811,18 @@ if (isset($_SESSION['formResult'])) {
                     await new Promise(res => existingImg.onload = res);
                 }
 
-                const detections = await faceapi.detectAllFaces(existingImg, new faceapi.TinyFaceDetectorOptions({
-                    inputSize: 512, // Increased from 416 for smaller faces
-                    scoreThreshold: 0.3 // More sensitive
+                // Try SSD Mobilenet First (Much more accurate for small faces)
+                let detections = await faceapi.detectAllFaces(existingImg, new faceapi.SsdMobilenetv1Options({
+                    minConfidence: 0.2 // Very sensitive
                 }));
+
+                // Fallback to TinyFaceDetector if SSD fails
+                if (detections.length === 0) {
+                    detections = await faceapi.detectAllFaces(existingImg, new faceapi.TinyFaceDetectorOptions({
+                        inputSize: 608, // Increased for resolution
+                        scoreThreshold: 0.2
+                    }));
+                }
 
                 if (detections.length === 0) {
                     console.log("No face detected by AI");
