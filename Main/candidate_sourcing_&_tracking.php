@@ -63,6 +63,22 @@ class CandidateManager
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 
         $this->conn->exec($sql);
+
+        // Ensure all necessary columns exist for existing tables
+        $columns = [
+            'extracted_image_path' => "VARCHAR(500) DEFAULT NULL AFTER resume_path",
+            'source' => "VARCHAR(100) DEFAULT 'Direct Application' AFTER status",
+            'skills' => "TEXT DEFAULT NULL AFTER source",
+            'notes' => "TEXT DEFAULT NULL AFTER skills"
+        ];
+
+        foreach ($columns as $column => $definition) {
+            try {
+                $this->conn->query("SELECT $column FROM candidates LIMIT 1");
+            } catch (PDOException $e) {
+                $this->conn->exec("ALTER TABLE candidates ADD COLUMN $column $definition");
+            }
+        }
     }
 
     public function handleRequests(): array
