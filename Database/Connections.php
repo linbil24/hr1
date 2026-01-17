@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost:3307';
-$dbname = 'hr1';       // your database name
-$username = 'root';     // your MySQL username
-$password = '';     // your MySQL password
+$dbname = 'hr1_hr1crane';       // your database name
+$username = 'hr1_crane';     // your MySQL username
+$password = '123';     // your MySQL password
 
 try {
     // Create PDO instance
