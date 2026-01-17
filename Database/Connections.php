@@ -1,5 +1,5 @@
 <?php
-$host = 'localhost:3307';
+$host = 'localhost';
 $dbname = 'hr1_hr1crane';       // your database name
 $username = 'hr1_crane';     // your MySQL username
 $password = '123';     // your MySQL password
