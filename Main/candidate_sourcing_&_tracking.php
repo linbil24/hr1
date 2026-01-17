@@ -1430,8 +1430,8 @@ if (isset($_SESSION['formResult'])) {
                         container.classList.add('shadow-sm', 'border', 'border-gray-200');
 
                         statusDiv.innerHTML = `
-                            <div class="flex flex-col items-center justify-center mb-2">
-                                <div class="flex items-center text-green-600">
+                            <div class="flex flex-col items-center text-center justify-center mb-2 w-full">
+                                <div class="flex items-center justify-center text-green-600 w-full">
                                     <i class="fas fa-check-circle text-lg mr-2"></i>
                                     <span class="font-bold">Profile Picture Extracted</span>
                                 </div>
@@ -1445,11 +1445,12 @@ if (isset($_SESSION['formResult'])) {
                         img.crossOrigin = "anonymous";
                         img.src = data.extracted_image + '?t=' + Date.now();
                         // SHOW immediately so user doesn't see a blank space
+                        img.className = "profile-image-preview block mx-auto";
                         img.style.display = 'block';
 
                         // temporary loading text
                         document.getElementById('previewText').textContent = 'Scanning for face...';
-                        document.getElementById('previewText').className = "preview-text text-blue-600 font-semibold italic";
+                        document.getElementById('previewText').className = "preview-text text-blue-600 font-semibold italic text-center mx-auto";
 
                         img.onload = function () {
                             detectAndCropFace(this);
@@ -1769,6 +1770,7 @@ if (isset($_SESSION['formResult'])) {
             const previewText = document.getElementById('previewText');
 
             function showImageFallback(img) {
+                img.className = "profile-image-preview block mx-auto";
                 img.style.display = 'block';
                 img.dataset.processed = 'true';
 
@@ -1778,13 +1780,13 @@ if (isset($_SESSION['formResult'])) {
 
                 const statusDiv = document.getElementById('validationStatus');
                 statusDiv.innerHTML = `
-                    <div class="flex items-center justify-center text-blue-600 mb-2">
+                    <div class="flex items-center justify-center text-blue-600 mb-2 w-full">
                         <i class="fas fa-image text-lg mr-2"></i>
                         <span class="font-bold">Image Extracted</span>
                     </div>
                 `;
                 previewText.textContent = 'Profile picture extracted!';
-                previewText.className = "preview-text text-blue-600 font-semibold";
+                previewText.className = "preview-text text-blue-600 font-semibold text-center mx-auto";
 
                 const btn = document.getElementById('validateBtn');
                 btn.innerHTML = '<i class="fas fa-check mr-2"></i> Profile Detected!';
@@ -1858,10 +1860,11 @@ if (isset($_SESSION['formResult'])) {
                     // Update UI
                     existingImg.src = newData;
                     existingImg.dataset.processed = 'true';
+                    existingImg.className = "profile-image-preview block mx-auto";
                     existingImg.style.display = 'block';
 
                     previewText.textContent = 'AI Refined: Profile found!';
-                    previewText.className = "preview-text text-green-600 font-semibold";
+                    previewText.className = "preview-text text-green-600 font-semibold text-center mx-auto";
 
                     saveCroppedFace(newData);
 
