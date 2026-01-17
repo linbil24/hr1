@@ -335,7 +335,8 @@ echo ' ';
 
             <div class="form-row">
               <input type="text" id="location" placeholder="Location" required>
-              <input type="text" id="contact" placeholder="Contact" required>
+              <input type="tel" id="contact" placeholder="Contact"
+                oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
             </div>
 
             <div class="form-row">
