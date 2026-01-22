@@ -231,9 +231,20 @@ try {
                                 <tr class="hover:bg-gray-700/50">
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
-                                            <img class="h-10 w-10 rounded-full object-cover"
-                                                src="../<?= htmlspecialchars($employee['photo_path']) ?>"
-                                                alt="Photo of <?= htmlspecialchars($employee['name']) ?>">
+                                            <?php
+                                            $photo = $employee['photo_path'];
+                                            if (empty($photo)) {
+                                                $photo = 'Profile/default.png'; // Fallback if empty
+                                            } elseif (stripos($photo, 'profile/') !== 0 && stripos($photo, 'Profile/') !== 0) {
+                                                $photo = 'Profile/' . $photo; // Prepend Profile/ if missing
+                                            }
+                                            // Ensure we point to parent dir
+                                            $photoUrl = "../" . htmlspecialchars($photo);
+                                            ?>
+                                            <img class="h-10 w-10 rounded-full object-cover border-2 border-gray-600"
+                                                src="<?= $photoUrl ?>?v=<?= time() ?>"
+                                                onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?= urlencode($employee['name']) ?>&background=random&color=fff';"
+                                                alt="<?= htmlspecialchars($employee['name']) ?>">
                                             <div class="ml-4 font-medium text-gray-200">
                                                 <?= htmlspecialchars($employee['name']) ?>
                                             </div>
@@ -361,7 +372,17 @@ try {
                             document.getElementById('modalEmployeeId').value = emp.id;
                             document.getElementById('modalName').textContent = emp.name;
                             document.getElementById('modalPosition').textContent = emp.position;
-                            document.getElementById('modalPhoto').src = `../${emp.photo_path || 'path/to/default.png'}`;
+                            let photoPath = emp.photo_path || '';
+                            if (photoPath && !photoPath.toLowerCase().startsWith('profile/')) {
+                                photoPath = 'Profile/' + photoPath;
+                            }
+                            if (!photoPath) photoPath = 'Profile/default.png';
+                            
+                            document.getElementById('modalPhoto').src = `../${photoPath}`;
+                            // Add error handler for modal image dynamically or ensure it exists
+                            document.getElementById('modalPhoto').onerror = function() {
+                                this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(emp.name)}&background=random&color=fff`;
+                            };
                             document.getElementById('modalAppraisalId').value = '';
 
                             submitBtn.className = "px-5 py-2 text-white rounded-lg transition-colors"; // Reset classes
