@@ -2,6 +2,26 @@
 session_start();
 include(__DIR__ . '/../../Database/Connections.php');
 
+// Ensure the performance_reviews table exists to prevent errors
+try {
+    $conn->exec("CREATE TABLE IF NOT EXISTS performance_reviews (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        employee_id INT NOT NULL,
+        review_date DATE NOT NULL,
+        review_type VARCHAR(50),
+        kpi_score DECIMAL(5,2),
+        attendance_score DECIMAL(5,2),
+        supervisor_quality_rating INT,
+        productivity_score DECIMAL(5,2),
+        promotion_recommended TINYINT(1) DEFAULT 0,
+        comments TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )");
+} catch (PDOException $e) {
+    // If table creation fails, the subsequent queries will likely fail too, 
+    // but we can catch this to prevent a hard crash on the create step if needed.
+}
+
 // Handle Form Submission (Add Review)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add_review') {
     try {

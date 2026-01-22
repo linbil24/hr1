@@ -66,7 +66,7 @@ function getIconColor($pageName, $current_page)
 
         <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 mt-6">Operations</p>
 
-        <a href="<?php echo $root_path; ?>Main/performance_and_appraisals.php"
+        <a href="<?php echo $root_path; ?>Modules/performance_and_appraisals.php"
             class="flex items-center gap-3 px-4 py-2.5 group <?php echo isActive('performance_and_appraisals.php', $current_page); ?>">
             <i
                 class="fas fa-user-check w-5 text-center <?php echo getIconColor('performance_and_appraisals.php', $current_page); ?>"></i>

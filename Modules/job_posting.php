@@ -573,7 +573,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'get_application' && isset($_GE
                     <div>
                         <label
                             class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Contact</label>
-                        <input type="tel" id="jobContact" name="contact"
+                        <input type="tel" id="jobContact" name="contact" maxlength="11"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                             class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
                     </div>
@@ -697,9 +697,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'get_application' && isset($_GE
                     <div class="mb-1.5">
                         <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Phone
                             Number</label>
-                        <input type="tel" name="phone" pattern="^63\d{10}$" maxlength="12" placeholder="639..."
-                            value="63"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, ''); if(this.value.length < 2) this.value = '63';"
+                        <input type="tel" name="phone" pattern="^(09|\+639)\d{9}$" maxlength="11" placeholder="09..."
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                             class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                             required>
                     </div>

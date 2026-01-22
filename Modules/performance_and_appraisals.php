@@ -150,28 +150,7 @@ try {
             font-family: "Poppins", sans-serif;
         }
 
-        .sidebar {
-            width: 260px;
-            background-color: var(--primary-color);
-            position: fixed;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            z-index: 100;
-        }
-
-        .main-content {
-            margin-left: 260px;
-            width: calc(100% - 260px);
-        }
-
-        .sidebar-nav a {
-            color: var(--text-light);
-        }
-
-        .sidebar-nav a:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
+        /* Sidebar styles removed - using component */
 
         .star-rating {
             display: flex;
@@ -217,20 +196,13 @@ try {
 </head>
 
 <body class="bg-gray-900">
-    <nav class="sidebar p-5 text-white flex flex-col border-r border-gray-700" style="background-color: black;">
-        <div class="sidebar-header flex items-center pb-5 border-b border-gray-700">
-            <i class='fas fa-user-shield text-3xl'></i>
-            <h2 class="text-xl font-bold ml-3">HR Admin</h2>
-        </div>
-        <ul class="sidebar-nav flex-grow pt-5 space-y-2">
-            <li><a href="../admin.php" class="flex items-center p-3 rounded-lg"><i
-                        class="fas fa-tachometer-alt w-6 text-center"></i><span class="ml-3">Dashboard</span></a></li>
-        </ul>
-        <div class="pt-5"><a href="../logout.php" class="flex items-center p-3 rounded-lg"><i
-                    class="fas fa-sign-out-alt w-6 text-center"></i><span class="ml-3">Logout</span></a></div>
-    </nav>
+    <?php
+    $root_path = '../';
+    include '../Components/sidebar_admin.php';
+    include '../Components/header_admin.php';
+    ?>
 
-    <div class="main-content p-6 flex flex-col">
+    <div class="main-content min-h-screen pt-24 pb-8 px-4 sm:px-8 ml-64 transition-all duration-300">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-200">Performance & Appraisals</h1>
             <div id="datetime" class="text-gray-400 font-medium"></div>
