@@ -234,9 +234,16 @@ try {
                                             <?php
                                             $photo = $employee['photo_path'];
                                             if (empty($photo)) {
-                                                $photo = 'Profile/default.png'; // Fallback if empty
-                                            } elseif (stripos($photo, 'profile/') !== 0 && stripos($photo, 'Profile/') !== 0) {
-                                                $photo = 'Profile/' . $photo; // Prepend Profile/ if missing
+                                                $photo = 'Profile/default.png';
+                                            } else {
+                                                // Fix case sensitivity: replace lowercase 'profile/' with 'Profile/'
+                                                // This ensures it works on Linux servers where "Profile" != "profile"
+                                                $photo = str_ireplace('profile/', 'Profile/', $photo);
+
+                                                // Double check: if it doesn't start with Profile/, prepend it (handling bare filenames)
+                                                if (strpos($photo, 'Profile/') !== 0) {
+                                                    $photo = 'Profile/' . $photo;
+                                                }
                                             }
                                             // Ensure we point to parent dir
                                             $photoUrl = "../" . htmlspecialchars($photo);
@@ -373,14 +380,21 @@ try {
                             document.getElementById('modalName').textContent = emp.name;
                             document.getElementById('modalPosition').textContent = emp.position;
                             let photoPath = emp.photo_path || '';
-                            if (photoPath && !photoPath.toLowerCase().startsWith('profile/')) {
+
+                            // 1. Force lowercase 'profile/' to 'Profile/' (fixing case sensitivity)
+                            photoPath = photoPath.replace(/^profile\//i, 'Profile/');
+
+                            // 2. If it is just a filename (e.g. "Viloria.jpeg"), prepend 'Profile/'
+                            if (photoPath && !photoPath.startsWith('Profile/')) {
                                 photoPath = 'Profile/' + photoPath;
                             }
+
+                            // 3. Fallback if empty
                             if (!photoPath) photoPath = 'Profile/default.png';
-                            
+
                             document.getElementById('modalPhoto').src = `../${photoPath}`;
                             // Add error handler for modal image dynamically or ensure it exists
-                            document.getElementById('modalPhoto').onerror = function() {
+                            document.getElementById('modalPhoto').onerror = function () {
                                 this.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(emp.name)}&background=random&color=fff`;
                             };
                             document.getElementById('modalAppraisalId').value = '';
