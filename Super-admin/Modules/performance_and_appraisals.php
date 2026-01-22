@@ -217,9 +217,23 @@ if ($totalEmployees > 0) {
                                 <?php foreach ($employees as $emp): ?>
                                     <tr class="hover:bg-gray-50 transition-colors">
                                         <td class="px-6 py-4">
+                                            <?php
+                                            // Fix image path case sensitivity
+                                            $photo = $emp['photo_path'];
+                                            if (!empty($photo)) {
+                                                // Convert 'profile/' to 'Profile/'
+                                                $photo = str_ireplace('profile/', 'Profile/', $photo);
+                                                // If just filename, prepend
+                                                if (strpos($photo, 'Profile/') !== 0) {
+                                                    $photo = 'Profile/' . $photo;
+                                                }
+                                            } else {
+                                                $photo = 'Profile/default.png';
+                                            }
+                                            ?>
                                             <div class="flex items-center gap-3">
-                                                <img src="../../<?= $emp['photo_path'] ?>"
-                                                    onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($emp['name']) ?>'"
+                                                <img src="../../<?= htmlspecialchars($photo) ?>?v=<?= time() ?>"
+                                                    onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=<?= urlencode($emp['name']) ?>&background=random&color=fff';"
                                                     class="w-9 h-9 rounded-full object-cover border border-gray-100">
                                                 <div>
                                                     <p class="font-medium text-sm text-gray-900"><?= $emp['name'] ?>
@@ -280,7 +294,20 @@ if ($totalEmployees > 0) {
                             <?php foreach ($history as $rec): ?>
                                 <div
                                     class="flex gap-3 items-start p-3 hover:bg-gray-50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
-                                    <img src="../../<?= $rec['image_path'] ?>" class="w-8 h-8 rounded-full object-cover">
+                                    <?php
+                                    $photo = $rec['image_path'];
+                                    if (!empty($photo)) {
+                                        $photo = str_ireplace('profile/', 'Profile/', $photo);
+                                        if (strpos($photo, 'Profile/') !== 0) {
+                                            $photo = 'Profile/' . $photo;
+                                        }
+                                    } else {
+                                        $photo = 'Profile/default.png';
+                                    }
+                                    ?>
+                                    <img src="../../<?= htmlspecialchars($photo) ?>?v=<?= time() ?>"
+                                        onerror="this.src='https://ui-avatars.com/api/?name=<?= urlencode($rec['full_name']) ?>&background=random&color=fff';"
+                                        class="w-8 h-8 rounded-full object-cover">
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-900 truncate"><?= $rec['full_name'] ?></p>
                                         <p class="text-xs text-gray-500"><?= $rec['review_type'] ?> Review •
